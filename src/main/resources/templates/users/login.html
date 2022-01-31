@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Аутентификация</title>
+    <style>
+        body {
+            margin-right: 35%;
+            margin-left: 25%;
+            margin-bottom: 25%;
+        }
+
+        .colortext {
+            background-color: lightblue;
+            border-color: lightblue;
+        }
+
+        .colortype {
+            background-color: dodgerblue;
+            font-size: 30px;
+            border-color: dodgerblue;
+        }
+    </style>
+</head>
+<body>
+
+<h1 th:align="center">Аутентификация</h1>
+
+<div th:align="center">
+    <form th:method="POST" th:action="@{/admin}">
+        <label>
+            <input name="j_username" placeholder="admin" class="colortext" style="width: 300px;height: 35px;"/>
+        </label><br><br>
+        <label>
+            <input name="j_password" placeholder="1" type="password" class="colortext"
+                   style="width: 300px;height: 35px;"/>
+        </label><br><br>
+        <input type="submit" value="Вход" style="width: 300px;height: 40px" class="colortype"/>
+    </form>
+</div>
+</body>
+</html>

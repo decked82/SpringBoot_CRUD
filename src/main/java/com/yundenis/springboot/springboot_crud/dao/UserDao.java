@@ -1,18 +1,21 @@
 package com.yundenis.springboot.springboot_crud.dao;
 
+
 import com.yundenis.springboot.springboot_crud.models.User;
 
 import java.util.List;
 
 public interface UserDao {
 
-    public List<User> showAllUsers();
+    List<User> showAllUsers();
 
-    public void saveUser(User user);
+    void saveUser(User user);
 
-    public User getUser(Long id);
+    User getUser(Long id);
 
-    public void updateUser(User user);
+    User getUsernameByName(String name);
 
-    public void deleteUser(Long id);
+    void updateUser(User user);
+
+    void deleteUser(Long id);
 }

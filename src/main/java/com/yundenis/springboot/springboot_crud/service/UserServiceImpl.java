@@ -3,22 +3,27 @@ package com.yundenis.springboot.springboot_crud.service;
 import com.yundenis.springboot.springboot_crud.dao.UserDao;
 import com.yundenis.springboot.springboot_crud.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
     private final UserDao userDao;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, RoleService roleService, UserDao userDao) {
+        this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
         this.userDao = userDao;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<User> showAllUsers() {
         return userDao.showAllUsers();
@@ -26,19 +31,33 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void saveUser(User user) {
+    public void saveUser(User user, String[] roles) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(roleService.getRolesByName(roles));
         userDao.saveUser(user);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public User getUser(Long id) {
         return userDao.getUser(id);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public User getUsernameByName(String name) {
+        return userDao.getUsernameByName(name);
+    }
+
     @Transactional
     @Override
-    public void updateUser(User updatedUser) {
+    public void updateUser(User updatedUser, String[] roles) {
+        if (!updatedUser.getPassword().isEmpty()) {
+            updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        } else {
+            updatedUser.setPassword(userDao.getUser(updatedUser.getId()).getPassword());
+        }
+        updatedUser.setRoles(roleService.getRolesByName(roles));
         userDao.updateUser(updatedUser);
     }
 

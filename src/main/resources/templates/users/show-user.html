@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Информационная страница о пользователе</title>
+    <style>
+        TABLE {
+            width: 1000px;
+            border-top: 1px solid lightgray;
+        }
+
+        TH {
+            border-bottom: 1px solid lightgray;
+        }
+
+        TR, TD {
+            border-bottom: 1px solid lightgray;
+        }
+
+        tr:nth-of-type(even) {
+            background-color: snow
+        }
+
+    </style>
+</head>
+<body>
+<form th:action="@{/logout}">
+    <input type="submit" value="Выйти" style="float: right">
+</form>
+
+<h2 th:align="center">Информация о пользователе</h2>
+<br>
+<table th:align="center" class="lux">
+    <tr>
+        <th th:align="left">Код</th>
+        <th th:align="left">Логин</th>
+        <th th:align="left">Имя</th>
+        <th th:align="left">Фамилия</th>
+        <th th:align="left">Возраст</th>
+        <th th:align="left">Электронный адрес</th>
+        <th th:align="left">Роль</th>
+    </tr>
+    <tr>
+        <td th:text="${newUser.getId()}"></td>
+        <td th:text="${newUser.getUsername()}"></td>
+        <td th:text="${newUser.getName()}">
+        <td th:text="${newUser.getSurname()}"></td>
+        <td th:text="${newUser.getAge()}"></td>
+        <td th:text="${newUser.getEmail()}"></td>
+        <td><span th:each="role:${newUser.getRoles()}"
+                  th:text="${roleStat.last} ? ${#strings.substringAfter(role.getRole().toLowerCase(), 'role_')} :
+                    ${#strings.substringAfter(role.getRole().toLowerCase(), 'role_')}+', '"></span></td>
+    </tr>
+</table>
+
+</body>
+</html>

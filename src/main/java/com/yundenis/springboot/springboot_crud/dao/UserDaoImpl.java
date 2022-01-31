@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -16,8 +15,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> showAllUsers() {
-        TypedQuery<User> query = entityManager.createQuery("FROM User", User.class);
-        return query.getResultList();
+        return entityManager.createQuery("SELECT DISTINCT u FROM User u join fetch u.roles", User.class).getResultList();
     }
 
     @Override
@@ -27,7 +25,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUser(Long id) {
-        return entityManager.find(User.class, id);
+        return entityManager.createQuery("select u from User u join fetch u.roles where u.id=:id", User.class)
+                .setParameter("id", id).getSingleResult();
+    }
+
+    @Override
+    public User getUsernameByName(String username) {
+        return entityManager.createQuery("select u from User u join fetch u.roles where u.username=:name", User.class)
+                .setParameter("name", username).getResultStream().findFirst().orElse(null);
     }
 
     @Override
@@ -37,8 +42,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void deleteUser(Long id) {
-        User user = entityManager.find(User.class, id);
-        entityManager.remove(user);
+        entityManager.remove(entityManager.find(User.class, id));
 
     }
 }
