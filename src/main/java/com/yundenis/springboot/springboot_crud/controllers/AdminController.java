@@ -21,11 +21,6 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login";
-    }
-
     @GetMapping("/admin")
     public String showUsers(Model model) {
         model.addAttribute("users", userService.showAllUsers());
