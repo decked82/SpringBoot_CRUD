@@ -25,8 +25,6 @@ public class User implements UserDetails {
     @Column(name = "age")
     private int age;
     @Column(name = "email")
-    private String email;
-    @Column(name = "username")
     private String username;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.REFRESH}, fetch = FetchType.LAZY)
@@ -38,12 +36,11 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String surname, String password, int age, String email, String username) {
+    public User(String name, String surname, String password, int age, String username) {
         this.name = name;
         this.surname = surname;
         this.password = password;
         this.age = age;
-        this.email = email;
         this.username = username;
     }
 
@@ -121,14 +118,6 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
@@ -144,7 +133,6 @@ public class User implements UserDetails {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
-                ", email='" + email + '\'' +
                 ", roles='" + roles + '\'' +
                 '}';
     }

@@ -52,10 +52,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void updateUser(User updatedUser, String[] roles) {
-        if (!updatedUser.getPassword().isEmpty()) {
+        if (!passwordEncoder.matches(userDao.getUser(updatedUser.getId()).getPassword(),
+                passwordEncoder.encode(updatedUser.getPassword()))) {
             updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-        } else {
-            updatedUser.setPassword(userDao.getUser(updatedUser.getId()).getPassword());
         }
         updatedUser.setRoles(roleService.getRolesByName(roles));
         userDao.updateUser(updatedUser);

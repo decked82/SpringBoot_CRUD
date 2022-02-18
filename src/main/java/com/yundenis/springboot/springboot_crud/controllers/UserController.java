@@ -22,7 +22,7 @@ public class UserController {
 
     @GetMapping("/user")
     public String showUser(Model model, Principal principal) {
-        model.addAttribute("newUser", userService.getUsernameByName(principal.getName()));
-        return "show-user";
+        model.addAttribute("authorizedUser", userService.getUsernameByName(principal.getName()));
+        return "user-profile";
     }
 }

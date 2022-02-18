@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/")
 public class AdminController {
@@ -22,34 +24,26 @@ public class AdminController {
     }
 
     @GetMapping("/admin")
-    public String showUsers(Model model) {
-        model.addAttribute("users", userService.showAllUsers());
-        return "show-users";
+    public String showUsers(Model model, Principal principal) {
+        model.addAttribute("allUsers", userService.showAllUsers());
+        model.addAttribute("authorizedUser", userService.getUsernameByName(principal.getName()));
+        model.addAttribute("roles", roleService.getAllRoles());
+        return "admin-profile";
     }
 
     @GetMapping("/admin/new")
-    public String newUser(Model model, @ModelAttribute("user") User user) {
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "user-info";
+    public String newUser(@ModelAttribute("newUser") User user) {
+        return "admin-profile";
     }
 
-    @PostMapping("/admin")
-    public String createUser(@ModelAttribute("user") User user,
-                             @RequestParam(value = "roles", required = false) String[] roles) {
+    @PostMapping("/admin/create")
+    public String createUser(User user, @RequestParam(value = "roles") String[] roles) {
         userService.saveUser(user, roles);
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/{id}/edit")
-    public String editUser(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", userService.getUser(id));
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "edit";
-    }
-
-    @PatchMapping("/admin/{id}")
-    public String updateUser(User user,
-                             @RequestParam(value = "roles", required = false) String[] roles) {
+     @PutMapping("/admin/{id}")
+    public String updateUser(User user, String[] roles) {
         userService.updateUser(user, roles);
         return "redirect:/admin";
     }

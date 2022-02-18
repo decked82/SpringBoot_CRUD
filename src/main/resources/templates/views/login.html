@@ -9,40 +9,27 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
-    <style>
-        body {
-            margin-right: 35%;
-            margin-left: 25%;
-            margin-bottom: 25%;
-        }
-
-        .colortext {
-            background-color: lightblue;
-            border-color: lightblue;
-        }
-
-        .colortype {
-            background-color: dodgerblue;
-            font-size: 30px;
-            border-color: dodgerblue;
-        }
-    </style>
 </head>
 <body>
 
-<h1 th:align="center">Аутентификация</h1>
+<form th:method="POST" th:action="@{/admin}">
 
-<div th:align="center">
-    <form th:method="POST" th:action="@{/admin}">
-        <label>
-            <input name="j_username" placeholder="admin" class="colortext" style="width: 300px;height: 35px;"/>
-        </label><br><br>
-        <label>
-            <input name="j_password" placeholder="1" type="password" class="colortext"
-                   style="width: 300px;height: 35px;"/>
-        </label><br><br>
-        <input type="submit" value="Вход" style="width: 300px;height: 40px" class="colortype"/>
-    </form>
-</div>
+    <div class="form-group col-md-2 m-auto pt-md-5">
+        <h1>Аутентификация</h1>
+    </div>
+
+    <div class="form-group row col-md-2 m-auto pt-md-3">
+            <input type="email" class="form-control" name="j_username" placeholder="admin@gmail.com"><br><br>
+    </div>
+
+    <div class="form-group row col-md-2 m-auto">
+            <input type="password" class="form-control" name="j_password" placeholder="1"><br><br>
+    </div>
+
+    <div class="form-group col-md-2 text-center m-auto">
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Вход</button>
+    </div>
+</form>
+
 </body>
 </html>
