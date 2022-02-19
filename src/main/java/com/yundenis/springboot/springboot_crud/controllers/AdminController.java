@@ -42,7 +42,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-     @PutMapping("/admin/{id}")
+     @PutMapping("/admin")
     public String updateUser(User user, String[] roles) {
         userService.updateUser(user, roles);
         return "redirect:/admin";
