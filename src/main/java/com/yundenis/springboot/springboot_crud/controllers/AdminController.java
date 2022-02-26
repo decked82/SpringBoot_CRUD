@@ -25,10 +25,10 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String showUsers(Model model, Principal principal) {
-        model.addAttribute("allUsers", userService.showAllUsers());
-        model.addAttribute("authorizedUser", userService.getUsernameByName(principal.getName()));
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "admin-profile";
+//        model.addAttribute("allUsers", userService.showAllUsers());
+//        model.addAttribute("authorizedUser", userService.getUsernameByName(principal.getName()));
+//        model.addAttribute("roles", roleService.getAllRoles());
+        return "admin-profile-spare";
     }
 
     @GetMapping("/admin/new")
@@ -38,19 +38,19 @@ public class AdminController {
 
     @PostMapping("/admin/create")
     public String createUser(User user, @RequestParam(value = "roles") String[] roles) {
-        userService.saveUser(user, roles);
+//        userService.saveUser(user, roles);
         return "redirect:/admin";
     }
 
      @PutMapping("/admin")
     public String updateUser(User user, String[] roles) {
-        userService.updateUser(user, roles);
+//        userService.updateUser(user, roles);
         return "redirect:/admin";
     }
 
     @DeleteMapping("/admin/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
+//        userService.deleteUser(id);
         return "redirect:/admin";
     }
 }
