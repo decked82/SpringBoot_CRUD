@@ -31,16 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void saveUser(User user, String[] roles) {
+    public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(roleService.getRolesByName(roles));
         userDao.saveUser(user);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public User getUser(Long id) {
-        return userDao.getUser(id);
     }
 
     @Transactional(readOnly = true)
@@ -51,12 +44,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateUser(User updatedUser, String[] roles) {
-        if (!passwordEncoder.matches(userDao.getUser(updatedUser.getId()).getPassword(),
-                passwordEncoder.encode(updatedUser.getPassword()))) {
-            updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+    public void updateUser(User updatedUser) {
+        if (!updatedUser.getPassword().isEmpty()) {
+            if (!passwordEncoder.matches(userDao.getUser(updatedUser.getId()).getPassword(),
+                    passwordEncoder.encode(updatedUser.getPassword()))) {
+                updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            }
+        } else {
+            updatedUser.setPassword(userDao.getUser(updatedUser.getId()).getPassword());
         }
-        updatedUser.setRoles(roleService.getRolesByName(roles));
         userDao.updateUser(updatedUser);
     }
 
@@ -64,5 +60,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         userDao.deleteUser(id);
+    }
+
+    @Transactional
+    @Override
+    public void createDefqultUsers(User user, String[] roles) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(roleService.getRolesByName(roles));
+        userDao.saveUser(user);
     }
 }

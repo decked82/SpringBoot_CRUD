@@ -28,7 +28,7 @@ public class CreaterRoleAndUser {
         roleService.saveRole(new Role("ROLE_USER"));
         User admin = new User("Админ", "Админов", "1", 30, "admin@gmail.com");
         User user = new User("Юсер", "Юсеров", "2", 25, "user@gmail.com");
-        userService.saveUser(admin, new String[]{"ROLE_ADMIN", "ROLE_USER"});
-        userService.saveUser(user, new String[]{"ROLE_USER"});
+        userService.createDefqultUsers(admin, new String[]{"ROLE_ADMIN", "ROLE_USER"});
+        userService.createDefqultUsers(user, new String[]{"ROLE_USER"});
     }
 }

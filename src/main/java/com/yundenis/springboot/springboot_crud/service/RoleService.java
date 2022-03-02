@@ -7,8 +7,6 @@ import java.util.Set;
 
 public interface RoleService {
 
-    Set<Role> getAllRoles();
-
     Set<Role> getRolesByName(String[] roles);
 
     void saveRole(Role role);
