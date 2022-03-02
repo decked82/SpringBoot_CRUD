@@ -5,7 +5,7 @@
     <title>Панель админа</title>
     <style>
         TABLE {
-            width: 1000px;
+            width: 1500px;
             border-top: 1px solid lightgray;
         }
 
@@ -25,7 +25,7 @@
 </head>
 <body>
 <form th:action="@{/logout}">
-    <input type="submit" value="Выйти" style="float: right">
+    <input type="submit" value="Выйти" style="margin-left: 1600px;margin-top: 100px">
 </form>
 
 <h2 th:align="center">Все пользователи</h2><br>
@@ -66,7 +66,7 @@
     </tr>
 </table>
 
-<form th:method="GET" th:action="@{/admin/new}" style="margin-left: 100px;margin-top: 50px">
+<form th:method="GET" th:action="@{/admin/new}" style="margin-left: 150px;margin-top: 50px">
     <input type="submit" value="Добавить"/>
 </form>
 
