@@ -89,7 +89,6 @@ on(document, 'click', '.btnEdit', e => {
 
     e.preventDefault()
     let target = e.target.parentNode.parentNode
-    id =target.children[0].innerHTML
 
     editId.value = target.children[0].innerHTML
     editFirstName.value = target.children[1].innerHTML
@@ -116,7 +115,7 @@ on(document, 'click', '.btnDel', e => {
 
 delModal.addEventListener('submit', (e) => {
     e.preventDefault()
-    fetch(`${url}/delete/${id}`, {
+    fetch(`${url}/${id}`, {
         method: 'DELETE',
     })
         .then(() => window.location.href = urlAdmin)
@@ -126,7 +125,7 @@ delModal.addEventListener('submit', (e) => {
 
 editModal.addEventListener('submit', (e) => {
     e.preventDefault()
-    fetch(`${url}/edit`, {
+    fetch(`${url}`, {
         method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
             id: editId.value,
             name: editFirstName.value,
@@ -155,7 +154,7 @@ let roleListNewUser = () => {
 }
 newUser.addEventListener('submit', (e) => {
         e.preventDefault()
-        fetch(`${url}/new`, {
+        fetch(`${url}`, {
             method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
                 name: firstName.value,
                 surname: lastName.value,

@@ -25,12 +25,12 @@ public class AdminRestController {
     }
 
     @GetMapping("/admin")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<User>> showAllUsers() {
         List<User> allUsers = userService.showAllUsers();
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
-    @PostMapping("/admin/new")
+    @PostMapping("/admin")
     public ResponseEntity<DataInfoHandler> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String error = getErrorsFromBindingResult((bindingResult));
@@ -40,13 +40,13 @@ public class AdminRestController {
         return new ResponseEntity<>(new DataInfoHandler("User was saved"), HttpStatus.OK);
     }
 
-    @DeleteMapping("/admin/delete/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<DataInfoHandler> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(new DataInfoHandler("User was deleted"), HttpStatus.OK);
     }
 
-    @PutMapping("/admin/edit")
+    @PutMapping("/admin")
     public ResponseEntity<DataInfoHandler> updateUser(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String error = getErrorsFromBindingResult((bindingResult));

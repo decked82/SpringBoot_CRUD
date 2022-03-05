@@ -4,7 +4,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,12 +21,10 @@ public class User implements UserDetails {
     @Column(name = "surname")
     private String surname;
     @Column(name = "password")
-    @NotBlank(message = "password should not empty")
     private String password;
     @Column(name = "age")
     private int age;
-    @Column(name = "email")
-    @NotBlank(message = "email should not empty")
+    @Column(name = "email", unique = true)
     private String username;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH,
