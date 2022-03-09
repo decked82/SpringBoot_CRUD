@@ -4,11 +4,15 @@ import com.yundenis.springboot.springboot_crud.models.User;
 import com.yundenis.springboot.springboot_crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -24,9 +28,10 @@ public class UserRestController {
     @GetMapping("/header")
     public String getPrincipal(Authentication authentication) {
         String email = userService.getUsernameByName(authentication.getName()).getUsername();
-        String roles = authentication.getAuthorities().toString();
+        Collection<GrantedAuthority> roles = authentication.getAuthorities().stream().map(r ->
+                new SimpleGrantedAuthority(r.getAuthority())).collect(Collectors.toList());
         String res = email + " с ролями: " + roles;
-        return res.replaceAll("role_", "");
+        return res.replaceAll("ROLE_", "");
     }
 
     @GetMapping("/user")
