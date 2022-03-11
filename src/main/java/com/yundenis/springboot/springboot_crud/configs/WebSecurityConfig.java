@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin()
                 .loginPage("/login")
                 .successHandler(successUserHandler)
-                .loginProcessingUrl("/admin")
+                .loginProcessingUrl("/login")
                 .usernameParameter("j_username")
                 .passwordParameter("j_password");
 
@@ -45,8 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/login").anonymous()
-                .antMatchers("/admin").access("hasRole('ADMIN')")
-                .antMatchers("/user").access("hasAnyRole('ADMIN', 'USER')").anyRequest().authenticated();
+                .antMatchers("/admin/**").access("hasRole('ADMIN')")
+                .antMatchers("/user/**").access("hasAnyRole('ADMIN', 'USER')").anyRequest().authenticated();
     }
 
     @Bean
