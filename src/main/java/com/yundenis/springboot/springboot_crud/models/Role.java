@@ -1,11 +1,9 @@
 package com.yundenis.springboot.springboot_crud.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -15,9 +13,6 @@ public class Role implements GrantedAuthority {
     private Long id;
     @Column(name = "role")
     private String role;
-    @ManyToMany(mappedBy = "roles")
-    @JsonIgnore
-    private Set<User> users;
 
     public Role() {
     }
