@@ -4,7 +4,9 @@ const urlHead = '/api/header'
 const header = document.getElementById('head')
 const tBody = document.querySelector('tbody')
 const delModal = document.getElementById('deleteModal')
+const newDelModal = new bootstrap.Modal(delModal)
 const editModal = document.getElementById('editModal')
+const newEditModal = new bootstrap.Modal(editModal)
 const newUser = document.getElementById('newuser')
 
 const firstName = document.getElementById('firstName')
@@ -36,9 +38,13 @@ fetch(urlHead)
     .catch(err => console.log(err))
 
 
-let res = ''
-const fillingUserTable = (allUsers) => {
-    allUsers.forEach(user => {
+
+const fillingUserTable = () => {
+    let res = ''
+    fetch(url)
+        .then(res => res.json())
+        .then(users => {
+            users.forEach(user => {
         res += `<tr>
                             <td>${user.id}</td>
                             <td>${user.name}</td>
@@ -52,7 +58,9 @@ const fillingUserTable = (allUsers) => {
                                 data-bs-toggle="modal" data-bs-target="#deleteModal">Удалить</button></td>
                         </tr>`
     })
-    tBody.innerHTML = res
+            tBody.innerHTML = res
+    })
+
 }
 
 fetch(url)
@@ -60,6 +68,17 @@ fetch(url)
     .then(data => fillingUserTable(data))
     .catch(error => console.log(error))
 
+function getAllRoles(target) {
+    fetch(`${url}/allroles`)
+        .then(res => res.json())
+        .then(roles => {
+            let roleList = ''
+            roles.forEach(role => {
+                roleList += `<option value='${role.id}'>${role.role.replace('ROLE_', ' ')}</option>`
+            })
+        target.innerHTML = roleList
+        })
+}
 
 const on = (element, event, selector, handler) => {
     element.addEventListener(event, e => {
@@ -73,12 +92,11 @@ const on = (element, event, selector, handler) => {
 let headers = new Headers();
 headers.append('Content-Type', 'application/json; charset=utf-8');
 
-let roleList = () => {
+let roleList = (options) => {
     let array = []
-    let options = document.querySelector('#editRoles').options
     for (let i = 0; i < options.length; i++) {
         if (options[i].selected) {
-            let role = options[i].value
+            let role = {id: options[i].value}
             array.push(role)
         }
     }
@@ -95,7 +113,7 @@ on(document, 'click', '.btnEdit', e => {
     editLastName.value = target.children[2].innerHTML
     editAge.value = target.children[3].innerHTML
     editEmail.value = target.children[4].innerHTML
-    editRoles.value = roleList()
+    editRoles.value = getAllRoles(editRoles)
 })
 
 
@@ -109,7 +127,7 @@ on(document, 'click', '.btnDel', e => {
     delLastName.value = target.children[2].innerHTML
     delAge.value = target.children[3].innerHTML
     delEmail.value = target.children[4].innerHTML
-    delRoles.value = roleList()
+    delRoles.value = getAllRoles(delRoles)
 })
 
 
@@ -118,13 +136,16 @@ delModal.addEventListener('submit', (e) => {
     fetch(`${url}/${id}`, {
         method: 'DELETE',
     })
-        .then(() => window.location.href = urlAdmin)
+        .then(data => fillingUserTable(data))
         .catch(error => console.log(error))
+    newDelModal.hide()
 })
 
 
 editModal.addEventListener('submit', (e) => {
     e.preventDefault()
+    let options = document.querySelector('#editRoles');
+    let setRoles = roleList(options)
     fetch(`${url}`, {
         method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
             id: editId.value,
@@ -133,38 +154,35 @@ editModal.addEventListener('submit', (e) => {
             age: editAge.value,
             username: editEmail.value,
             password: editPassword.value,
-            roles: roleList()
+            roles: setRoles
         })
     })
-        .then(response => response.json())
-        .then(() => window.location.href = urlAdmin)
+        .then(data => fillingUserTable(data))
         .catch(error => console.log(error))
+    newEditModal.hide()
 })
 
-let roleListNewUser = () => {
-    let array = []
-    let options = document.querySelector('#roles').options
-        for (let i = 0; i < options.length; i++) {
-            if (options[i].selected) {
-                let role = options[i].value
-                array.push(role)
-            }
-        }
-    return array;
-}
+getAllRoles(roles)
+
 newUser.addEventListener('submit', (e) => {
         e.preventDefault()
-        fetch(`${url}`, {
+        let options = document.querySelector('#roles');
+        let setRoles = roleList(options)
+    fetch(`${url}`, {
             method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
                 name: firstName.value,
                 surname: lastName.value,
                 age: age.value,
                 username: email.value,
                 password: password.value,
-                roles: roleListNewUser()
+                roles: setRoles
             })
         })
-            .then(response => response.json())
-            .then(() => window.location.href = urlAdmin)
+            .then(data => fillingUserTable(data))
             .catch(error => console.log(error))
+        firstName.value = ''
+        lastName.value = ''
+        age.value = ''
+        email.value = ''
+        password.value = ''
     })

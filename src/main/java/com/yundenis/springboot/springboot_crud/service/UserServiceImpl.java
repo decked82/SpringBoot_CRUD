@@ -62,11 +62,4 @@ public class UserServiceImpl implements UserService {
         userDao.deleteUser(id);
     }
 
-    @Transactional
-    @Override
-    public void createDefqultUsers(User user, String[] roles) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(roleService.getRolesByName(roles));
-        userDao.saveUser(user);
-    }
 }

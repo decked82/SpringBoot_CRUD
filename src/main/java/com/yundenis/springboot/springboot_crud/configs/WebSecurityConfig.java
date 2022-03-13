@@ -46,7 +46,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/login").anonymous()
                 .antMatchers("/admin/**").access("hasRole('ADMIN')")
-                .antMatchers("/user/**").access("hasAnyRole('ADMIN', 'USER')").anyRequest().authenticated();
+                .antMatchers("/user/**").access("hasAnyRole('ADMIN', 'USER')")
+                .antMatchers("/api/admin/**").access("hasRole('ADMIN')")
+                .antMatchers("/api/user/**").access("hasRole('ADMIN')")
+                .anyRequest().authenticated();
     }
 
     @Bean

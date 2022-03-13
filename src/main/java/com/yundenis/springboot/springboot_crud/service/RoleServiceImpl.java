@@ -18,6 +18,11 @@ public class RoleServiceImpl implements RoleService {
         this.roleDao = roleDao;
     }
 
+    @Override
+    public Set<Role> getAllRoles() {
+        return roleDao.getAllRoles();
+    }
+
     @Transactional(readOnly = true)
     @Override
     public Set<Role> getRolesByName(String[] roles) {

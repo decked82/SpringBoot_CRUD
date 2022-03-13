@@ -4,6 +4,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,17 +21,22 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "name")
+    @NotBlank(message = "name is required field")
     private String name;
     @Column(name = "surname")
+    @NotBlank(message = "surname is required field")
     private String surname;
     @Column(name = "password")
     private String password;
     @Column(name = "age")
+    @Min(value = 1, message = "must be greater than 0")
     private int age;
     @Column(name = "email", unique = true)
+    @NotBlank(message = "email is required field")
+    @Pattern(regexp = "^(.+)@(\\S+)$", message = "email must have @ sybbol")
     private String username;
 
-    @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Set;
 
 @Component
 public class CreaterRoleAndUser {
@@ -24,11 +25,25 @@ public class CreaterRoleAndUser {
     @PostConstruct
     public void initialize() {
 
-        roleService.saveRole(new Role("ROLE_ADMIN"));
-        roleService.saveRole(new Role("ROLE_USER"));
+        if (roleService.getRolesByName(new String[]{"ROLE_ADMIN", "ROLE_USER"}).isEmpty()) {
+            roleService.saveRole(new Role("ROLE_ADMIN"));
+            roleService.saveRole(new Role("ROLE_USER"));
+        }
+
+        Set<Role> rolesForAdmin = roleService.getRolesByName(new String[]{"ROLE_ADMIN", "ROLE_USER"});
+        Set<Role> rolesForUser = roleService.getRolesByName(new String[]{"ROLE_USER"});
+
         User admin = new User("Админ", "Админов", "1", 30, "admin@gmail.com");
         User user = new User("Юсер", "Юсеров", "2", 25, "user@gmail.com");
-        userService.createDefqultUsers(admin, new String[]{"ROLE_ADMIN", "ROLE_USER"});
-        userService.createDefqultUsers(user, new String[]{"ROLE_USER"});
+
+        if (userService.getUsernameByName("admin@gmail.com")==null) {
+            admin.setRoles(rolesForAdmin);
+            userService.saveUser(admin);
+        }
+
+        if (userService.getUsernameByName("user@gmail.com")==null) {
+            user.setRoles(rolesForUser);
+            userService.saveUser(user);
+        }
     }
 }

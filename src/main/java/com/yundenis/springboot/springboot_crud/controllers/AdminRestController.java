@@ -1,64 +1,52 @@
 package com.yundenis.springboot.springboot_crud.controllers;
 
-import com.yundenis.springboot.springboot_crud.exception_handling.DataInfoHandler;
+import com.yundenis.springboot.springboot_crud.models.Role;
 import com.yundenis.springboot.springboot_crud.models.User;
+import com.yundenis.springboot.springboot_crud.service.RoleService;
 import com.yundenis.springboot.springboot_crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
 public class AdminRestController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public AdminRestController(UserService userService) {
+    public AdminRestController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping("/admin")
-    public ResponseEntity<List<User>> showAllUsers() {
-        List<User> allUsers = userService.showAllUsers();
-        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+    public List<User> showAllUsers() {
+        return userService.showAllUsers();
+    }
+
+    @GetMapping("/admin/allroles")
+    public Set<Role> getAllRoles() {
+        return roleService.getAllRoles();
     }
 
     @PostMapping("/admin")
-    public ResponseEntity<DataInfoHandler> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String error = getErrorsFromBindingResult((bindingResult));
-            return new ResponseEntity<>(new DataInfoHandler(error), HttpStatus.BAD_REQUEST);
-        }
+    public void createUser(@Valid @RequestBody User user) {
         userService.saveUser(user);
-        return new ResponseEntity<>(new DataInfoHandler("User was saved"), HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/{id}")
-    public ResponseEntity<DataInfoHandler> deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        return new ResponseEntity<>(new DataInfoHandler("User was deleted"), HttpStatus.OK);
     }
 
     @PutMapping("/admin")
-    public ResponseEntity<DataInfoHandler> updateUser(@Valid @RequestBody User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String error = getErrorsFromBindingResult((bindingResult));
-            return new ResponseEntity<>(new DataInfoHandler(error), HttpStatus.BAD_REQUEST);
-        }
+    public void updateUser(@Valid @RequestBody User user) {
         userService.updateUser(user);
-        return new ResponseEntity<>(new DataInfoHandler("User was updated"), HttpStatus.OK);
-    }
-
-    private String getErrorsFromBindingResult(BindingResult bindingResult) {
-        return bindingResult.getFieldErrors().stream().
-                map(m -> m.getDefaultMessage()).collect(Collectors.joining("; "));
     }
 
 }

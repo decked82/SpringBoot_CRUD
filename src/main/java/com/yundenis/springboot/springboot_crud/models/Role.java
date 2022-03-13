@@ -3,7 +3,6 @@ package com.yundenis.springboot.springboot_crud.models;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
@@ -11,7 +10,7 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "role")
+    @Column(name = "role", unique = true)
     private String role;
 
     public Role() {
@@ -48,21 +47,6 @@ public class Role implements GrantedAuthority {
                 "id=" + id +
                 ", role='" + role + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        if (getClass() != o.getClass()) return false;
-        Role roleObj = (Role) o;
-        return getRole().equals(roleObj.getRole());
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        return prime + Objects.hash(getRole());
     }
 
 }

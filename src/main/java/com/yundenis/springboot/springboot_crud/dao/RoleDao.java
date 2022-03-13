@@ -7,6 +7,8 @@ import java.util.Set;
 
 public interface RoleDao {
 
+    Set<Role> getAllRoles();
+
     Set<Role> getRolesByName(String[] roles);
 
     void saveRole(Role role);
