@@ -3,6 +3,8 @@ package com.yundenis.springboot.springboot_crud.controllers;
 import com.yundenis.springboot.springboot_crud.models.User;
 import com.yundenis.springboot.springboot_crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,16 +28,16 @@ public class UserRestController {
     }
 
     @GetMapping("/header")
-    public String getPrincipal(Authentication authentication) {
+    public ResponseEntity<String> getPrincipal(Authentication authentication) {
         String email = userService.getUsernameByName(authentication.getName()).getUsername();
         Collection<GrantedAuthority> roles = authentication.getAuthorities().stream().map(r ->
                 new SimpleGrantedAuthority(r.getAuthority())).collect(Collectors.toList());
         String res = email + " с ролями: " + roles;
-        return res.replaceAll("ROLE_", "");
+        return new ResponseEntity<>(res.replaceAll("ROLE_", ""), HttpStatus.OK);
     }
 
     @GetMapping("/user")
-    public User showUser(Principal principal) {
-        return userService.getUsernameByName(principal.getName());
+    public ResponseEntity<User> showUser(Principal principal) {
+        return new ResponseEntity<>(userService.getUsernameByName(principal.getName()), HttpStatus.OK);
     }
 }

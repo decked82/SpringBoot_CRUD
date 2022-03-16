@@ -5,6 +5,8 @@ import com.yundenis.springboot.springboot_crud.models.User;
 import com.yundenis.springboot.springboot_crud.service.RoleService;
 import com.yundenis.springboot.springboot_crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,28 +27,31 @@ public class AdminRestController {
     }
 
     @GetMapping("/admin")
-    public List<User> showAllUsers() {
-        return userService.showAllUsers();
+    public ResponseEntity<List<User>> showAllUsers() {
+        return new ResponseEntity<>(userService.showAllUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/admin/allroles")
-    public Set<Role> getAllRoles() {
-        return roleService.getAllRoles();
+    public ResponseEntity<Set<Role>> getAllRoles() {
+        return new ResponseEntity<>(roleService.getAllRoles(), HttpStatus.OK);
     }
 
     @PostMapping("/admin")
-    public void createUser(@Valid @RequestBody User user) {
+    public ResponseEntity<Void> createUser(@Valid @RequestBody User user) {
         userService.saveUser(user);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/admin")
-    public void updateUser(@Valid @RequestBody User user) {
+    public ResponseEntity<Void> updateUser(@Valid @RequestBody User user) {
         userService.updateUser(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

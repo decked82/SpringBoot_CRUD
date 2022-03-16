@@ -1,7 +1,8 @@
 const url = '/api/admin'
-const urlAdmin = '/admin'
 const urlHead = '/api/header'
 const header = document.getElementById('head')
+const usersTab = document.querySelector('#navTab a:first-child')
+const alluserstab = new bootstrap.Tab(usersTab)
 const tBody = document.querySelector('tbody')
 const delModal = document.getElementById('deleteModal')
 const newDelModal = new bootstrap.Modal(delModal)
@@ -180,6 +181,7 @@ newUser.addEventListener('submit', (e) => {
         })
             .then(data => fillingUserTable(data))
             .catch(error => console.log(error))
+    alluserstab.show()
         firstName.value = ''
         lastName.value = ''
         age.value = ''
