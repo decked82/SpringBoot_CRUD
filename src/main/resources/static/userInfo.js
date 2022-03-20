@@ -3,10 +3,18 @@ const urlHead = '/api/header'
 const header = document.getElementById('head')
 const tBody = document.querySelector('tbody')
 
-fetch(urlHead)
-    .then(response => response.text())
-    .then(data => header.innerText = data)
-    .catch(err => console.log(err))
+function getAuthenticationForUserPage() {
+    fetch(urlHead)
+        .then(res => res.json())
+        .then(user => {
+            let role = user.username + ' с ролями: '
+            user.roles.forEach(r => {
+                role+=r.role.replace('ROLE_', ' ')
+            })
+            header.innerHTML = role
+        })
+}
+getAuthenticationForUserPage()
 
 
 let res = ''

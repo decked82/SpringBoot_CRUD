@@ -2,12 +2,12 @@ const url = '/api/admin'
 const urlHead = '/api/header'
 const header = document.getElementById('head')
 const usersTab = document.querySelector('#navTab a:first-child')
-const alluserstab = new bootstrap.Tab(usersTab)
+const alluserstab = bootstrap.Tab.getOrCreateInstance(usersTab)
 const tBody = document.querySelector('tbody')
 const delModal = document.getElementById('deleteModal')
-const newDelModal = new bootstrap.Modal(delModal)
+const newDelModal = bootstrap.Modal.getOrCreateInstance(delModal)
 const editModal = document.getElementById('editModal')
-const newEditModal = new bootstrap.Modal(editModal)
+const newEditModal = bootstrap.Modal.getOrCreateInstance(editModal)
 const newUser = document.getElementById('newuser')
 
 const firstName = document.getElementById('firstName')
@@ -33,10 +33,18 @@ const editPassword = document.getElementById('editPassword')
 const editRoles = document.getElementById('editRoles')
 
 
-fetch(urlHead)
-    .then(response => response.text())
-    .then(data => header.innerText = data)
-    .catch(err => console.log(err))
+function getAuthentication() {
+    fetch(urlHead)
+        .then(res => res.json())
+        .then(user => {
+            let role = user.username + ' с ролями: '
+            user.roles.forEach(r => {
+                role+=r.role.replace('ROLE_', ' ')
+            })
+            header.innerHTML = role
+        })
+}
+getAuthentication()
 
 
 
@@ -68,6 +76,7 @@ fetch(url)
     .then(response => response.json())
     .then(data => fillingUserTable(data))
     .catch(error => console.log(error))
+
 
 function getAllRoles(target) {
     fetch(`${url}/allroles`)
