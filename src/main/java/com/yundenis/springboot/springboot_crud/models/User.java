@@ -7,7 +7,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -82,6 +81,7 @@ public class User implements UserDetails {
         return roles;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }

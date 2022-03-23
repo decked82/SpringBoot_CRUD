@@ -37,9 +37,9 @@ public class AdminRestController {
     }
 
     @PostMapping("/admin")
-    public ResponseEntity<Void> createUser(@Valid @RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         userService.saveUser(user);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/{id}")
@@ -49,9 +49,9 @@ public class AdminRestController {
     }
 
     @PutMapping("/admin")
-    public ResponseEntity<Void> updateUser(@Valid @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
         userService.updateUser(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 }
