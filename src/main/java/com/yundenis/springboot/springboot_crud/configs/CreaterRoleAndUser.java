@@ -27,7 +27,7 @@ public class CreaterRoleAndUser {
 
     @PostConstruct
     public void initialize() {
-        if (!env.getProperty("spring.jpa.hibernate.ddl-auto").equals("update")) {
+        if (env.getProperty("spring.jpa.hibernate.ddl-auto").equals("create")) {
             roleService.saveRole(new Role("ROLE_ADMIN"));
             roleService.saveRole(new Role("ROLE_USER"));
 

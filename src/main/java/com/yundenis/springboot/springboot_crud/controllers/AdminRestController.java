@@ -31,6 +31,11 @@ public class AdminRestController {
         return new ResponseEntity<>(userService.showAllUsers(), HttpStatus.OK);
     }
 
+    @GetMapping("/admin/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+    }
+
     @GetMapping("/admin/allroles")
     public ResponseEntity<Set<Role>> getAllRoles() {
         return new ResponseEntity<>(roleService.getAllRoles(), HttpStatus.OK);

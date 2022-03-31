@@ -90,6 +90,16 @@ function getAllRoles(target) {
         })
 }
 
+function getUser() {
+    fetch(`${url}/${id}`)
+        .then(res => res.json())
+        .then(user => {
+            user.roles.forEach(role => {
+                console.log(role.id)
+            })
+        })
+}
+
 const on = (element, event, selector, handler) => {
     element.addEventListener(event, e => {
         if (e.target.closest(selector)) {
@@ -113,10 +123,20 @@ let roleList = (options) => {
     return array;
 }
 
+let selectedRoles = (options) => {
+    for (let i = 0; i < options.length; i++) {
+        console.log(options[i].value)
+        if (options[i].selected) {
+            options[i].selected = 'selected'
+        }
+    }
+}
+
 on(document, 'click', '.btnEdit', e => {
 
     e.preventDefault()
     let target = e.target.parentNode.parentNode
+    id = target.children[0].innerHTML
 
     editId.value = target.children[0].innerHTML
     editFirstName.value = target.children[1].innerHTML
@@ -124,6 +144,7 @@ on(document, 'click', '.btnEdit', e => {
     editAge.value = target.children[3].innerHTML
     editEmail.value = target.children[4].innerHTML
     editRoles.value = getAllRoles(editRoles)
+    getUser(id)
 })
 
 
@@ -154,7 +175,7 @@ delModal.addEventListener('submit', (e) => {
 
 editModal.addEventListener('submit', (e) => {
     e.preventDefault()
-    let options = document.querySelector('#editRoles');
+    let options = document.querySelector('#editRoles')
     let setRoles = roleList(options)
     fetch(`${url}`, {
         method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
@@ -174,10 +195,21 @@ editModal.addEventListener('submit', (e) => {
 
 getAllRoles(roles)
 
+let selectedRoleList = (options) => {
+    let array = []
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].selected) {
+            let role = {id: options[i].value}
+            array.push(role)
+        }
+    }
+    return array;
+}
+
 newUser.addEventListener('submit', (e) => {
         e.preventDefault()
-        let options = document.querySelector('#roles');
-        let setRoles = roleList(options)
+        let options = document.querySelector('#roles')
+        let setRoles = selectedRoleList(options)
     fetch(`${url}`, {
             method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
                 name: firstName.value,
@@ -196,4 +228,7 @@ newUser.addEventListener('submit', (e) => {
         age.value = ''
         email.value = ''
         password.value = ''
+        for(let i = 0; i<roles.options.length;i++) {
+            roles.options[i].selected = false
+        }
     })
