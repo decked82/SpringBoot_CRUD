@@ -90,12 +90,13 @@ function getAllRoles(target) {
         })
 }
 
-function getUser() {
+function getUser(id, selectedRoleList) {
+    console.log(id)
     fetch(`${url}/${id}`)
         .then(res => res.json())
         .then(user => {
             user.roles.forEach(role => {
-                console.log(role.id)
+                selectedRoleList.push(role.id)
             })
         })
 }
@@ -123,9 +124,13 @@ let roleList = (options) => {
     return array;
 }
 
-let selectedRoles = (options) => {
+let selectedRoles = (options, selectedRoleList) => {
+    //console.log(selectedRoleList)
     for (let i = 0; i < options.length; i++) {
-        console.log(options[i].value)
+        //console.log(options[i].value)
+        if (selectedRoleList.includes(options[i].value)) {
+            console.log(options[i].value)
+        }
         if (options[i].selected) {
             options[i].selected = 'selected'
         }
@@ -137,6 +142,7 @@ on(document, 'click', '.btnEdit', e => {
     e.preventDefault()
     let target = e.target.parentNode.parentNode
     id = target.children[0].innerHTML
+    let selectedRoleList = []
 
     editId.value = target.children[0].innerHTML
     editFirstName.value = target.children[1].innerHTML
@@ -144,7 +150,8 @@ on(document, 'click', '.btnEdit', e => {
     editAge.value = target.children[3].innerHTML
     editEmail.value = target.children[4].innerHTML
     editRoles.value = getAllRoles(editRoles)
-    getUser(id)
+    getUser(id, selectedRoleList)
+    selectedRoles(editRoles.options, selectedRoleList)
 })
 
 
