@@ -7,7 +7,7 @@ function getAuthenticationForUserPage() {
     fetch(urlHead)
         .then(res => res.json())
         .then(user => {
-            let role = user.username + ' с ролями: '
+            let role = user.username + ' with roles: '
             user.roles.forEach(r => {
                 role+=r.role.replace('ROLE_', ' ')
             })

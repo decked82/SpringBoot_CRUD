@@ -34,8 +34,8 @@ public class CreaterRoleAndUser {
             Set<Role> rolesForAdmin = roleService.getRolesByName(new String[]{"ROLE_ADMIN", "ROLE_USER"});
             Set<Role> rolesForUser = roleService.getRolesByName(new String[]{"ROLE_USER"});
 
-            User admin = new User("Админ", "Админов", "1", 30, "admin@gmail.com");
-            User user = new User("Юсер", "Юсеров", "2", 25, "user@gmail.com");
+            User admin = new User("Admin", "Admin", "1", 30, "admin@gmail.com");
+            User user = new User("User", "User", "2", 25, "user@gmail.com");
 
             admin.setRoles(rolesForAdmin);
             userService.saveUser(admin);
