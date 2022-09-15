@@ -31,7 +31,7 @@ public class AdminController {
         return "admin-profile";
     }
 
-    @GetMapping("/admin/new")
+    @GetMapping("/admin/new-user")
     public String newUser(@ModelAttribute("newUser") User user) {
         return "admin-profile";
     }
@@ -42,7 +42,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-     @PutMapping("/admin")
+    @PutMapping("/admin")
     public String updateUser(User user, String[] roles) {
         userService.updateUser(user, roles);
         return "redirect:/admin";
